@@ -1,1 +1,23 @@
 .DS_Store
+# Dependencias de Node y Python
+node_modules/
+__pycache__/
+*.pyc
+
+# Artefactos de compilación de Java y Maven
+target/
+*.class
+*.jar
+*.war
+
+# Directorios de compilación de Vite / Frontend
+dist/
+build/
+
+# Archivos de entorno y credenciales locales
+.env
+*.pem
+
+# Datos persistentes locales de Docker (Nexus y Jenkins)
+nexus-data/
+jenkins_home/

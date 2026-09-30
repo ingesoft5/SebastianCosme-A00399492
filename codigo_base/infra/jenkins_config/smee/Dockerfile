@@ -6,6 +6,7 @@ FROM node:20-alpine
 
 RUN npm install -g smee-client
 
-# TODO
+# Definimos el destino hacia el contenedor de Jenkins en el puerto interno 8080
+ENV SMEE_TARGET="http://jenkins:8080/github-webhook/"
 
 ENTRYPOINT ["sh", "-c", "smee -u \"$SMEE_URL\" -t \"$SMEE_TARGET\""]

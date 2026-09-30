@@ -9,21 +9,30 @@ version: "3.9"
 services:
   jenkins:
     build: .
-    container_name:
+    container_name: jenkins
+    user: root # Añadido para tener permisos sobre el socket de Docker
     networks:
+      - cicd_network
     ports:
+      - "${JENKINS_UI_PORT}:8080"
+      - "${JENKINS_AGENT_PORT}:50000"
     volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
 
   smee:
     build: ./smee
     container_name: smee-client
     environment:
+      - SMEE_URL=${SMEE_CHANNEL_URL}
     networks:
+      - cicd_network
     depends_on:
+      - jenkins
 
 networks:
   cicd_network:
-    name: cicd_network
+    external: true # Declarada como externa para compartirla con Nexus
 
 volumes:
   jenkins_home:

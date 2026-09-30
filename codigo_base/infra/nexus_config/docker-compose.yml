@@ -13,14 +13,17 @@ services:
     networks:
       - cicd_network
     ports:
+      - "9081:8081" # Interfaz de Usuario (UI) de Nexus
+      - "9080:8082" # Docker Registry (El puerto interno 8082 lo configurarás luego en la UI)
     volumes:
+      - nexus_data:/nexus-data
     environment:
+      - INSTALL4J_ADD_VM_PARAMS=-Xms1024m -Xmx1024m -XX:MaxDirectMemorySize=1024m
     healthcheck:
-      test: 
-      interval: 
-      timeout: 
-      retries: 
-      start_period: 
+      test: ["CMD", "curl", "-f", "http://localhost:8081/service/rest/v1/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   cicd_network:
