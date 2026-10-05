@@ -10,7 +10,7 @@ services:
   jenkins:
     build: .
     container_name: jenkins
-    user: root # Añadido para tener permisos sobre el socket de Docker
+    user: root
     networks:
       - cicd_network
     ports:
@@ -32,7 +32,7 @@ services:
 
 networks:
   cicd_network:
-    external: true # Declarada como externa para compartirla con Nexus
+    external: true
 
 volumes:
   jenkins_home:

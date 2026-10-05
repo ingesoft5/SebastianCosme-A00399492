@@ -12,28 +12,30 @@ version: "3.9"
 
 services:
   backend:
-    # TODO
-    container_name: 
+    image: localhost:9080/studytrack-backend:${IMAGE_TAG}
+    container_name: studytrack-backend-prod
     ports:
+      - "8080:8080"
     networks:
+      - product-network
     healthcheck:
-      test:
-      interval: 
-      timeout: 
-      retries: 
-      start_period: 
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/tasks"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   frontend:
-    # TODO:
-    image: 
-    container_name:
+    image: localhost:9080/studytrack-frontend:${IMAGE_TAG}
+    container_name: studytrack-frontend-prod
     ports:
+      - "3000:80"
     networks:
+      - product-network
     depends_on:
       backend:
-        condition:
+        condition: service_healthy
 
 networks:
-  # TODO
   product-network:
-    driver: 
+    driver: bridge
