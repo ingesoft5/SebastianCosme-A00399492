@@ -8,7 +8,7 @@
 # =============================================================================
 
 # Etapa 1: Construccion (Builder)
-FROM maven:3.9.6-alpine AS builder
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS builder
 WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline
