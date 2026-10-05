@@ -42,6 +42,7 @@ pipeline {
         stage('Package & Tag Inmutable') {
             steps {
                 dir('codigo_base/backend') {
+                    sh "mvn versions:set -DnewVersion=${env.IMAGE_TAG}"
                     sh 'mvn clean package -DskipTests'
                     sh "docker build -t ${env.NEXUS_REGISTRY}/studytrack-backend:${env.IMAGE_TAG} ."
                 }
