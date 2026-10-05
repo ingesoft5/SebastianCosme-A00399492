@@ -17,7 +17,6 @@ pipeline {
     }
 
     environment {
-        IMAGE_TAG = ""
         NEXUS_REGISTRY   = "localhost:9080"
         NEXUS_MAVEN_REPO = "http://localhost:9081/repository/maven-releases/"
         NEXUS_CREDENTIALS_ID = "nexus-credentials"
@@ -29,7 +28,9 @@ pipeline {
                 checkout scm
 
                 script {
-                    env.IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
+                 def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                 env.IMAGE_TAG = "${env.BUILD_NUMBER}-${commitHash}"
+                 echo "Tag generado para esta ejecucion: ${env.IMAGE_TAG}"
                 }
 
                 dir('codigo_base/backend') {
