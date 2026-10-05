@@ -12,6 +12,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3'
+    }
+
     environment {
         IMAGE_TAG = ""
         NEXUS_REGISTRY   = "localhost:9080"
