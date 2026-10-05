@@ -70,7 +70,7 @@ pipeline {
 
         stage('Deploy & Smoke Test') {
             steps {
-                sh 'export IMAGE_TAG=${IMAGE_TAG} && docker compose -f codigo_base/deploy/docker-compose.yml up -d'
+                sh 'export IMAGE_TAG=${IMAGE_TAG} && docker-compose -f codigo_base/deploy/docker-compose.yml up -d'
                 sh 'curl --retry 10 --retry-delay 5 --retry-connrefused -f http://localhost:8080/api/tasks'
             }
         }
