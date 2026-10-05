@@ -63,3 +63,5 @@ evitan colisiones entre sí, pero si usted ya tiene algo corriendo en alguno
 de ellos, ajústelo en los archivos `.env` correspondientes — lo importante es
 la consistencia entre lo que declara en `docker-compose.yml` y lo que
 referencia en el `Jenkinsfile`.
+
+cambios
