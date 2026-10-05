@@ -55,7 +55,10 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${env.NEXUS_CREDENTIALS_ID}", passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
                     dir('codigo_base/backend') {
-                        sh 'mvn deploy -DskipTests'
+                        sh '''
+                        echo "<settings><servers><server><id>nexus</id><username>${NEXUS_USER}</username><password>${NEXUS_PASS}</password></server></servers></settings>" > settings.xml
+                        mvn deploy -s settings.xml -DskipTests
+                        '''
                     }
                     sh "docker login ${env.NEXUS_REGISTRY} -u ${NEXUS_USER} -p ${NEXUS_PASS}"
                     sh "docker push ${env.NEXUS_REGISTRY}/studytrack-backend:${env.IMAGE_TAG}"
