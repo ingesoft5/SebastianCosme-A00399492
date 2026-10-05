@@ -32,7 +32,7 @@ pipeline {
                     env.IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
                 }
 
-                dir('backend') {
+                dir('codigo_base/backend') {
                     sh 'mvn test'
                 }
             }
@@ -40,11 +40,11 @@ pipeline {
 
         stage('Package & Tag Inmutable') {
             steps {
-                dir('backend') {
+                dir('codigo_base/backend') {
                     sh 'mvn clean package -DskipTests'
                     sh "docker build -t ${env.NEXUS_REGISTRY}/studytrack-backend:${env.IMAGE_TAG} ."
                 }
-                dir('frontend') {
+                dir('codigo_base/frontend') {
                     sh "docker build -t ${env.NEXUS_REGISTRY}/studytrack-frontend:${env.IMAGE_TAG} ."
                 }
             }
@@ -53,7 +53,7 @@ pipeline {
         stage('Publish to Nexus') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${env.NEXUS_CREDENTIALS_ID}", passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
-                    dir('backend') {
+                    dir('codigo_base/backend') {
                         sh 'mvn deploy -DskipTests'
                     }
                     sh "docker login ${env.NEXUS_REGISTRY} -u ${NEXUS_USER} -p ${NEXUS_PASS}"
@@ -65,7 +65,7 @@ pipeline {
 
         stage('Deploy & Smoke Test') {
             steps {
-                sh 'export IMAGE_TAG=${IMAGE_TAG} && docker compose -f deploy/docker-compose.yml up -d'
+                sh 'export IMAGE_TAG=${IMAGE_TAG} && docker compose -f codigo_base/deploy/docker-compose.yml up -d'
                 sh 'curl --retry 10 --retry-delay 5 --retry-connrefused -f http://localhost:8080/api/tasks'
             }
         }
